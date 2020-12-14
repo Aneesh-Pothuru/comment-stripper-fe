@@ -4,15 +4,18 @@ import IdInput from './components/IdInput/IdInput'
 // import load from './loading.gif'
 import load1 from './source.gif'
 import './App.css';
+import song from './moneylonger.mp3'
 
 const initialState = {
   videoId: '',
   loading: ''
 }
+
 class App extends React.Component {
   constructor() {
     super();
     this.state = initialState;
+    this.audio = new Audio(song);
   }
   onInputChange = (event) => {
     this.setState({ videoId: event.target.value })
@@ -21,6 +24,7 @@ class App extends React.Component {
 
   onButtonSubmit = () => {
     this.setState({ loading: true })
+    this.audio.play();
     fetch('http://localhost:8000/videoId/' + this.state.videoId, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -28,6 +32,7 @@ class App extends React.Component {
     }).then(response => {
       console.log(response);
       this.setState({ loading: false });
+      this.audio.pause();
     }).catch(err => console.log(err))
   }
 
