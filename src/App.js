@@ -1,10 +1,13 @@
 import React from 'react'
 import CS from './commentstripper.gif';
 import IdInput from './components/IdInput/IdInput'
+// import load from './loading.gif'
+import load1 from './source.gif'
 import './App.css';
 
 const initialState = {
   videoId: '',
+  loading: ''
 }
 class App extends React.Component {
   constructor() {
@@ -13,34 +16,18 @@ class App extends React.Component {
   }
   onInputChange = (event) => {
     this.setState({ videoId: event.target.value })
+    console.log(this.state)
   }
 
-  // onButtonSubmit = () => {
-  //   fetch('http://localhost:3000/videoId', {
-  //     method: 'post',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify({
-  //       videoId: this.state.videoId
-  //     })
-  //   })
-  //     .then(response => response.json())
-  //     .then(response => {
-  //       if (response) {
-  //         fetch('http://localhost:3000/videoId/' + this.state.videoId, {
-  //           method: 'put',
-  //           headers: { 'Content-Type': 'application/json' },
-  //         })
-  //       }
-  //     })
-  // }
-
   onButtonSubmit = () => {
-    fetch('http://localhost:3000/videoId/' + this.state.videoId, {
-      method: 'post',
+    this.setState({ loading: true })
+    fetch('http://localhost:8000/videoId/' + this.state.videoId, {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        videoId: this.state.videoId
-      })
+      mode: 'cors',
+    }).then(response => {
+      console.log(response);
+      this.setState({ loading: false });
     }).catch(err => console.log(err))
   }
 
@@ -48,7 +35,14 @@ class App extends React.Component {
     return (
       <div className="App">
         <img src={CS} className="logo" alt="Comment Stripper" />
-        <IdInput onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
+        {
+          this.state.loading ?
+            <div>
+              <h1>STEALING...</h1>
+              <img src={load1} className="logo" alt="" />
+            </div> :
+            <IdInput onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
+        }
       </div>
     );
   }
