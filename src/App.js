@@ -1,10 +1,10 @@
 import React from 'react'
 import CS from './commentstripper.gif';
 import IdInput from './components/IdInput/IdInput'
-// import load from './loading.gif'
-import load1 from './source.gif'
+import load from './source.gif'
+import ste from './stealing.gif'
 import './App.css';
-import song from './moneylonger.mp3'
+import song from './ml.mp3'
 
 const initialState = {
   videoId: '',
@@ -33,6 +33,7 @@ class App extends React.Component {
       console.log(response);
       this.setState({ loading: false });
       this.audio.pause();
+      this.audio = new Audio(song);
     }).catch(err => console.log(err))
   }
 
@@ -43,8 +44,10 @@ class App extends React.Component {
         {
           this.state.loading ?
             <div>
-              <h1>STEALING...</h1>
-              <img src={load1} className="logo" alt="" />
+              <div>
+                <img src={ste} className="logo" alt="Stealing" />
+              </div>
+              <img src={load} className="logo" alt="" />
             </div> :
             <IdInput onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
         }
