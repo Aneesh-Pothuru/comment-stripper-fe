@@ -9,7 +9,8 @@ import song from './ml.mp3'
 const initialState = {
   apiKey: '',
   videoId: '',
-  loading: ''
+  loading: '',
+  storeKey: false
 }
 
 class App extends React.Component {
@@ -39,6 +40,7 @@ class App extends React.Component {
     }).then(response => {
       console.log(response);
       this.setState({ loading: false });
+      this.setState({ storeKey: true });
       this.audio.pause();
       this.audio = new Audio(song);
     }).catch(err => console.log(err))
@@ -56,7 +58,12 @@ class App extends React.Component {
               </div>
               <img src={load} className="logo" alt="" />
             </div> :
-            <IdInput onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} onKeyChange={this.onKeyChange} />
+            <IdInput
+              onInputChange={this.onInputChange}
+              onButtonSubmit={this.onButtonSubmit}
+              onKeyChange={this.onKeyChange}
+              storeKey={this.state.storeKey}
+            />
         }
       </div>
     );
