@@ -7,6 +7,7 @@ import './App.css';
 import song from './ml.mp3'
 
 const initialState = {
+  apiKey: '',
   videoId: '',
   loading: ''
 }
@@ -17,6 +18,12 @@ class App extends React.Component {
     this.state = initialState;
     this.audio = new Audio(song);
   }
+
+  onKeyChange = (event) => {
+    this.setState({ apiKey: event.target.value })
+    console.log(this.state)
+  }
+
   onInputChange = (event) => {
     this.setState({ videoId: event.target.value })
     console.log(this.state)
@@ -25,7 +32,7 @@ class App extends React.Component {
   onButtonSubmit = () => {
     this.setState({ loading: true })
     this.audio.play();
-    fetch('http://localhost:8000/videoId/' + this.state.videoId, {
+    fetch('http://localhost:8000/videoId/' + this.state.videoId + "/" + this.state.apiKey, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       mode: 'cors',
@@ -49,7 +56,7 @@ class App extends React.Component {
               </div>
               <img src={load} className="logo" alt="" />
             </div> :
-            <IdInput onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
+            <IdInput onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} onKeyChange={this.onKeyChange} />
         }
       </div>
     );
