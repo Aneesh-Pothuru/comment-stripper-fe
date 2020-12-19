@@ -10,7 +10,17 @@ const initialState = {
   apiKey: '',
   videoId: '',
   loading: '',
-  storeKey: false
+  storeKey: false,
+  collectedData: false,
+  comments: []
+}
+
+function download(content, fileName, contentType) {
+  const a = document.createElement("a");
+  const file = new Blob([content], { type: contentType });
+  a.href = URL.createObjectURL(file);
+  a.download = fileName;
+  a.click();
 }
 
 class App extends React.Component {
@@ -37,13 +47,24 @@ class App extends React.Component {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       mode: 'cors',
-    }).then(response => {
-      console.log(response);
+    }).then(response =>
+      response.json()
+    ).then(comment => {
+      this.setState({ comments: comment });
+      this.setState({ collectedData: true });
       this.setState({ loading: false });
       this.setState({ storeKey: true });
       this.audio.pause();
       this.audio = new Audio(song);
-    }).catch(err => console.log(err))
+      console.log(this.state);
+      download(JSON.stringify(comment), this.state.videoId + "video.json", "text/plain");
+    }).catch(err => {
+      console.log(err);
+      this.setState({ loading: false });
+      this.setState({ storeKey: true });
+      this.audio.pause();
+      this.audio = new Audio(song);
+    })
   }
 
   render() {
